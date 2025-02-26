@@ -1,5 +1,5 @@
 model_path: unlearning_ckpt2/ft_model_10_epochs_inst_lr1e-3
-save_dir: ${model_path}
+save_dir: /scratch/mb26/bp0395/output
 
 data_path: TUFA
 split: all

@@ -10,5 +10,5 @@ split: forget10
 data_path: TUFA
 num_epochs: 10
 forget_loss: dpo
-save_dir: memory/${model_path}/1GPU_${forget_loss}_${lr}_${split}
+save_dir: /scratch/mb26/bp0395/output/memory/${model_path}/1GPU_${forget_loss}_${lr}_${split}
 override: false
