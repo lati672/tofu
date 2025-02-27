@@ -11,7 +11,7 @@ from pathlib import Path
 from omegaconf import OmegaConf
 from utils import get_model_identifiers_from_yaml
 
-def find_all_linear_imnames(model):
+def find_all_linear_names(model):
     cls = torch.nn.Linear
     lora_module_names = set()
     for name, module in model.named_modules():
