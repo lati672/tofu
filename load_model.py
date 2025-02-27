@@ -95,42 +95,6 @@ def main(cfg):
 
     model = AutoModelForCausalLM.from_pretrained(model_id, use_flash_attention_2=model_cfg["flash_attention2"]=="true", torch_dtype=torch.bfloat16, trust_remote_code = True)
     
-    # Hot fix for https://discuss.huggingface.co/t/help-with-llama-2-finetuning-setup/50035
-    model.generation_config.do_sample = True
-
-    if model_cfg["gradient_checkpointing"] == "true":
-        model.gradient_checkpointing_enable()
-
-    if cfg.LoRA.r != 0:
-        config = LoraConfig(
-            r=cfg.LoRA.r, 
-            lora_alpha=cfg.LoRA.alpha, 
-            target_modules=find_all_linear_names(model), 
-            lora_dropout=cfg.LoRA.dropout,
-            bias="none", 
-            task_type="CAUSAL_LM"
-        )
-        model = get_peft_model(model, config)
-        model.enable_input_require_grads()
-    
-
-    trainer = CustomTrainer(
-        model=model,
-        train_dataset=torch_format_dataset,
-        eval_dataset=torch_format_dataset,
-        args=training_args,
-        data_collator=custom_data_collator,
-    )
-    model.config.use_cache = False  # silence the warnings. Please re-enable for inference!
-    trainer.train()
-
-    #save the model
-    if cfg.LoRA.r != 0:
-        model = model.merge_and_unload()
-
-
-    model.save_pretrained(cfg.save_dir)
-    tokenizer.save_pretrained(cfg.save_dir)
 
 if __name__ == "__main__":
     main()
